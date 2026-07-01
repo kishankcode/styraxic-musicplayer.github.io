@@ -5,7 +5,7 @@
 }
 @font-face {
     font-family: 'Doto';
-    src: url('/fonts/Doto-Regular.ttf') format('truetype');
+    src: url('./fonts/Doto-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
