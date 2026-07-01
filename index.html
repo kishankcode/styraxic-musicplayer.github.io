@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <title>Document</title>
+</head>
+<body class="preload">
+    <div class="banner">
+        <h1 class="logo">STYRAXIC</h1>
+    </div>
+    <div class="carousel-container">
+        <img src="/imgs/maroon.jpg" alt="Album 1" class="carousel-item" data-title="maroon" data-artist="kevin abstract" data-audio="/audio/maroon.mp3">
+        <img src="/imgs/17.png" alt="Album 2" class="carousel-item" data-title="17" data-artist="dean blunt" data-audio="/audio/17.mp3">
+        <img src="/imgs/lovefield.jpg" alt="Album 3" class="carousel-item" data-title="lovefield" data-artist="underscores" data-audio="/audio/lovefield.mp3">
+        <img src="/imgs/yesyoumay.jpg" alt="Album 4" class="carousel-item" data-title="yes, you may" data-artist="lucy bedroque" data-audio="/audio/yesyoumay.mp3">
+        <img src="/imgs/rnb.jpg" alt="Album 5" class="carousel-item" data-title="r&b" data-artist="mike + tony seltzer" data-audio="/audio/rnb.mp3">
+        <div class="controls">
+            <button id="prevBtn" class="carousel-control" aria-label="Previous">
+                <span class="arrow" aria-hidden="true">‹</span>
+            </button>
+            <button id="nextBtn" class="carousel-control" aria-label="Next">
+                <span class="arrow" aria-hidden="true">›</span>
+            </button>
+        </div>
+    </div>
+    <div class="audio-player">
+        <audio id="carouselAudio" preload="metadata"></audio>
+        <div class="volume-row">
+            <span class="volume-label">VOL</span>
+            <div class="volume-shell">
+                <div class="volume-bar"></div>
+            </div>
+            <span class="volume-pct">50%</span>
+        </div>
+        <div class="track-meta">Artist Song - Artist Name</div>
+        <div class="progress-row">
+            <span class="time time-start">0:00</span>
+            <div class="progress-shell">
+                <div class="progress-bar"></div>
+            </div>
+            <span class="time time-end">0:00</span>
+        </div>
+    </div>
+</body>
+</html>

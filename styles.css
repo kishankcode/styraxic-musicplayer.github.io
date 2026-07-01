@@ -1,0 +1,227 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+    font-family: 'Doto';
+    src: url('/fonts/Doto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+body {
+  background-color: white;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease 0.5s;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.preload {
+  opacity: 0;
+}
+
+body.interaction-locked .carousel-container,
+body.interaction-locked .carousel-item,
+body.interaction-locked .carousel-control {
+  pointer-events: none;
+}
+
+.banner{
+    display: flex;
+    width: 100vw;
+    height: 20vh;
+    justify-content: center;
+    align-items: center;
+}
+.logo {
+    color: #000;
+    font-family: 'Doto';
+    font-size: 80px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.carousel-container {
+  position: relative;
+  width: 100vw;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px; 
+  overflow: hidden;
+}
+
+.carousel-item {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background-color: sandybrown;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  transition: transform 1s ease, filter 1s ease, opacity 1s ease;
+  will-change: transform;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.carousel-item.is-initial {
+  transition-delay: 1.5s;
+}
+
+.carousel-container .controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+.carousel-control {
+  pointer-events: auto;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0,0,0,0.85);
+  font-family: 'Doto', monospace;
+  font-size: 56px;
+  line-height: 1;
+  width: auto;
+  height: auto;
+  position: relative;
+  z-index: 10;
+  -webkit-font-smoothing: none;
+  text-rendering: geometricPrecision;
+}
+
+.carousel-control .arrow {
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.carousel-control:hover {
+  color: rgba(0,0,0,0.95);
+}
+
+.audio-player,
+.carousel-control,
+.track-meta,
+.volume-row,
+.progress-row {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.1s;
+}
+
+body.ui-visible .audio-player,
+body.ui-visible .carousel-control,
+body.ui-visible .track-meta,
+body.ui-visible .volume-row,
+body.ui-visible .progress-row {
+  opacity: 1;
+}
+
+.audio-player {
+  width: min(920px, calc(100vw - 32px));
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 16px;
+  padding-top: 8px;
+  color: #000;
+  font-family: 'Doto', sans-serif;
+}
+
+.volume-row {
+  display: grid;
+  grid-template-columns: auto 190px auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.volume-row .volume-label,
+.volume-row .volume-pct {
+  font-size: 0.85rem;
+  color: #000;
+  font-weight: 700;
+  justify-self: start;
+}
+
+.volume-row .volume-label {
+  justify-self: end;
+}
+
+.volume-shell,
+.progress-shell {
+  position: relative;
+  height: 10px;
+  background: rgba(0, 118, 255, 0.16);
+  border-radius: 999px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.volume-shell {
+  width: 100%;
+}
+
+.volume-bar,
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #0066ff;
+  border-radius: 999px;
+}
+
+.volume-bar.animate-in {
+  transition: width 0.4s ease;
+}
+
+.volume-pct {
+  min-width: 32px;
+  text-align: right;
+}
+
+.track-meta {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000;
+  margin-top: 12px;
+}
+
+.time {
+  color: #000;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.time {
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce){body,body.preload{transition:none!important;opacity:1!important}}
