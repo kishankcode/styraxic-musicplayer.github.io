@@ -117,11 +117,22 @@ function pauseCurrentTrack() {
   updatePlayPauseIcons();
 }
 
+function getNormalizedAudioUrl(src) {
+  if (!src) return '';
+  try {
+    return new URL(src, window.location.href).href;
+  } catch (error) {
+    return src;
+  }
+}
+
 function togglePlayPauseForIndex(index) {
   const item = items[index];
   if (!item || !audio) return;
   const trackSrc = item.dataset.audio;
-  const isSameTrack = audio.src.includes(trackSrc);
+  const normalizedTrackSrc = getNormalizedAudioUrl(trackSrc);
+  const currentTrackSrc = getNormalizedAudioUrl(audio.currentSrc || audio.src);
+  const isSameTrack = normalizedTrackSrc && currentTrackSrc && normalizedTrackSrc === currentTrackSrc;
 
   if (isSameTrack) {
     if (audio.paused) {

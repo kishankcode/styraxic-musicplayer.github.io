@@ -93,9 +93,9 @@ body.interaction-locked .carousel-control {
 
 .carousel-control {
   pointer-events: auto;
-  background: transparent;
+  background: white;
   cursor: pointer;
-  padding: 0;
+  padding: 0 0 10px;
   border: none;
   display: inline-flex;
   align-items: center;
@@ -104,8 +104,9 @@ body.interaction-locked .carousel-control {
   font-family: 'Doto', monospace;
   font-size: 56px;
   line-height: 1;
-  width: auto;
-  height: auto;
+  width: 50px;
+  height: 60px;
+  border-radius: 5%;
   position: relative;
   z-index: 10;
   -webkit-font-smoothing: none;
@@ -113,8 +114,15 @@ body.interaction-locked .carousel-control {
 }
 
 .carousel-control .arrow {
-  display: inline-block;
-  transform: translateY(-1px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: none;
+  line-height: 1;
+}
+
+.carousel-control#nextBtn .arrow {
+  transform: translateX(2px);
 }
 
 .carousel-control:hover {
