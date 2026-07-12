@@ -352,3 +352,56 @@ audio.addEventListener('ended', () => {
   goToIndex(activeIndex + 1);
 });
 
+// --- Detroit time & weather widget integration ---
+const detroitTimeEl = document.querySelector('.info-text .time');
+const detroitTempEl = document.querySelector('.info-text .temp');
+const detroitTzEl = document.querySelector('.info-text .tz');
+
+function updateDetroitTime() {
+  if (!detroitTimeEl || !detroitTzEl) return;
+  const now = new Date();
+  const timeStr = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'America/Detroit',
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).format(now);
+
+  // Get short zone name like "EDT" or "EST"
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Detroit', timeZoneName: 'short' }).formatToParts(now);
+  const zoneName = (parts.find(p => p.type === 'timeZoneName') || {}).value || 'ET';
+
+  // Compute UTC offset for the zone (e.g. -4)
+  const utc = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const tzDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Detroit' }));
+  const offsetMinutes = (utc.getTime() - tzDate.getTime()) / 60000;
+  const offsetHours = -offsetMinutes / 60;
+  const offsetText = `UTC${offsetHours >= 0 ? '+' : ''}${offsetHours}`;
+
+  detroitTimeEl.textContent = timeStr;
+  detroitTzEl.textContent = `${zoneName} (${offsetText})`;
+}
+
+async function fetchDetroitWeather() {
+  if (!detroitTempEl) return;
+  try {
+    // Open-Meteo (no API key) — Detroit coordinates
+    const resp = await fetch('https://api.open-meteo.com/v1/forecast?latitude=42.3314&longitude=-83.0458&current_weather=true&temperature_unit=fahrenheit');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const temp = data?.current_weather?.temperature;
+    if (typeof temp === 'number') {
+      detroitTempEl.textContent = `${Math.round(temp)}°F`;
+    }
+  } catch (err) {
+    console.warn('Failed to fetch Detroit weather:', err);
+  }
+}
+
+// Start updates
+updateDetroitTime();
+setInterval(updateDetroitTime, 1000);
+fetchDetroitWeather();
+setInterval(fetchDetroitWeather, 10 * 60 * 1000); // refresh every 10 minutes
+

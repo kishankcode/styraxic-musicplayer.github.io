@@ -10,6 +10,9 @@
     font-style: normal;
     font-display: swap;
 }
+
+@media (prefers-reduced-motion: reduce){body,body.preload{transition:none!important;opacity:1!important}}
+
 body {
   background-color: white;
   opacity: 1;
@@ -72,7 +75,6 @@ body.interaction-locked .carousel-control {
   transition: transform 1s ease, filter 1s ease, opacity 1s ease;
   will-change: transform;
   object-fit: cover;
-  border-radius: 8px;
   border: 1px solid black;
   cursor: pointer;
 }
@@ -232,4 +234,30 @@ body.ui-visible .progress-row {
   font-size: 0.85rem;
 }
 
-@media (prefers-reduced-motion: reduce){body,body.preload{transition:none!important;opacity:1!important}}
+/* Top-right small info box (rounded) */
+.info-box{
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 260px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 12px;
+  font-family: 'Doto', 'Courier New', Courier, monospace;
+  color: #111;
+  z-index: 9999;
+}
+.info-text{flex:1; display:flex; flex-direction:column; align-items:flex-end; text-align:right}
+.info-text .location{font-size:15px; letter-spacing:1px; font-weight:700}
+.info-text .temp{font-size:20px; margin-top:6px; font-weight:700}
+.info-text .time{font-size:14px; margin-top:6px}
+.info-text .tz{font-size:12px; margin-top:6px; opacity:0.9}
+.info-icon{font-size:56px; line-height:1; font-weight:800; width:64px; height:64px; display:flex; align-items:center; justify-content:center}
+
+@media (max-width:520px){
+  .info-box{right:6px; left:6px; width: auto; padding:8px}
+  .info-icon{font-size:44px; width:48px;height:48px}
+}
