@@ -202,7 +202,7 @@ body.ui-visible .progress-row {
 }
 
 .volume-bar.animate-in {
-  transition: width 0.4s ease;
+  transition: none;
 }
 
 .volume-pct {

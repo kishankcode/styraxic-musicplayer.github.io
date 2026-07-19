@@ -30,7 +30,7 @@ let activeIndex = 2;
 let isAnimating = false;
 let isInitialLoadLocked = true;
 const TRANSITION_MS = 1000; // matches CSS transition duration
-const INITIAL_LOCK_MS = 2200; // allow the initial load transition to finish before interactions
+const INITIAL_LOCK_MS = 1500; // allow the initial load transition to finish before interactions
 
 document.body.classList.add('interaction-locked');
 
@@ -194,27 +194,71 @@ function updateCarousel() {
   });
 }
 
-// Initial render
-items.forEach((item) => item.classList.add('is-initial'));
-updateCarousel();
-playTrackForIndex(activeIndex);
+const CAROUSEL_ENTRANCE_DELAY_MS = 500;
+const UI_REVEAL_DELAY_MS = 1500;
 
-window.addEventListener('load', () => {
-  items.forEach((item) => item.classList.remove('is-initial'));
+let hasRevealedUI = false;
+let hasStartedCarouselEntrance = false;
+
+function applyInitialCarouselState() {
+  items.forEach((item) => {
+    item.classList.add('is-initial');
+    item.style.transform = 'translateX(0px) translateZ(0px) scale(1)';
+    item.style.zIndex = '10';
+    item.style.filter = 'brightness(1)';
+    item.style.opacity = '1';
+  });
+}
+
+function startCarouselEntrance() {
+  if (hasStartedCarouselEntrance) return;
+  hasStartedCarouselEntrance = true;
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      items.forEach((item) => item.classList.remove('is-initial'));
+      updateCarousel();
+    });
+  });
+}
+
+function revealPageSequence() {
+  if (hasRevealedUI) return;
+  hasRevealedUI = true;
+
+  applyInitialCarouselState();
   document.body.classList.remove('preload');
-  if (volumeBar) {
-    volumeBar.classList.add('animate-in');
-  }
-  updateVolumeUI();
+
+  window.setTimeout(() => {
+    startCarouselEntrance();
+  }, CAROUSEL_ENTRANCE_DELAY_MS);
+
   window.setTimeout(() => {
     if (volumeBar) {
-      volumeBar.classList.remove('animate-in');
+      volumeBar.classList.add('animate-in');
     }
-  }, 450);
-  window.setTimeout(() => {
+    updateVolumeUI();
+    window.setTimeout(() => {
+      if (volumeBar) {
+        volumeBar.classList.remove('animate-in');
+      }
+    }, 450);
     document.body.classList.add('ui-visible');
     unlockInitialInteractions();
-  }, INITIAL_LOCK_MS);
+  }, UI_REVEAL_DELAY_MS);
+}
+
+// Initial render
+playTrackForIndex(activeIndex);
+
+if (document.readyState === 'complete') {
+  revealPageSequence();
+} else {
+  window.addEventListener('load', revealPageSequence, { once: true });
+}
+
+window.addEventListener('pageshow', () => {
+  revealPageSequence();
 });
 
 function unlockInitialInteractions() {
