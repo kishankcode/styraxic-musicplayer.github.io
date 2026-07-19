@@ -12,6 +12,7 @@ const timeEnd = document.querySelector('.time-end');
 
 const DEFAULT_DISPLAYED_VOLUME = 0.5;
 const ACTUAL_VOLUME_SCALE = 0.5;
+const themeToggle = document.getElementById('themeToggle');
 let displayedVolume = DEFAULT_DISPLAYED_VOLUME;
 
 audio.volume = DEFAULT_DISPLAYED_VOLUME * ACTUAL_VOLUME_SCALE;
@@ -33,6 +34,44 @@ const TRANSITION_MS = 1000; // matches CSS transition duration
 const INITIAL_LOCK_MS = 1500; // allow the initial load transition to finish before interactions
 
 document.body.classList.add('interaction-locked');
+
+function applyTheme(isDark) {
+  document.body.classList.toggle('dark-mode', isDark);
+
+  if (themeToggle) {
+    const icon = themeToggle.querySelector('.theme-icon');
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+
+    if (icon) {
+      icon.src = isDark ? './imgs/sun.svg' : './imgs/moon.svg';
+      icon.alt = isDark ? 'Sun icon' : 'Moon icon';
+    }
+  }
+}
+
+function initializeTheme() {
+  try {
+    const savedTheme = window.localStorage.getItem('music-player-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+  } catch (error) {
+    applyTheme(false);
+  }
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const isDark = !document.body.classList.contains('dark-mode');
+    applyTheme(isDark);
+    try {
+      window.localStorage.setItem('music-player-theme', isDark ? 'dark' : 'light');
+    } catch (error) {
+      console.warn('Theme preference could not be saved:', error);
+    }
+  });
+}
+
+initializeTheme();
 
 function updateTrackMeta(index) {
   if (!trackMeta) return;
@@ -227,7 +266,10 @@ function revealPageSequence() {
   hasRevealedUI = true;
 
   applyInitialCarouselState();
-  document.body.classList.remove('preload');
+
+  window.setTimeout(() => {
+    document.body.classList.remove('preload');
+  }, 50);
 
   window.setTimeout(() => {
     startCarouselEntrance();

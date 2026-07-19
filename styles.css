@@ -1,3 +1,27 @@
+:root {
+    --surface: #ffffff;
+    --bg: var(--surface);
+    --text: #000000;
+    --panel: var(--surface);
+    --accent: #0066ff;
+    --accent-soft: rgba(0, 118, 255, 0.16);
+    --control-bg: var(--surface);
+    --control-text: rgba(0, 0, 0, 0.85);
+    --border: #000000;
+}
+
+body.dark-mode {
+    --surface: #181818;
+    --bg: var(--surface);
+    --text: #f4f4f4;
+    --panel: var(--surface);
+    --accent: #ff4d4d;
+    --accent-soft: rgba(255, 77, 77, 0.22);
+    --control-bg: var(--surface);
+    --control-text: #ffffff;
+    --border: #f4f4f4;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -14,19 +38,35 @@
 @media (prefers-reduced-motion: reduce){body,body.preload{transition:none!important;opacity:1!important}}
 
 body {
-  background-color: white;
-  opacity: 1;
+  background-color: var(--bg);
+  color: var(--text);
+  opacity: 0;
+  visibility: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: opacity 1.5s ease 0.5s;
+  transition: opacity 1.5s ease 0.5s, visibility 0s linear 1.5s, background-color 0.4s ease, color 0.4s ease;
   height: 100vh;
   overflow: hidden;
 }
 
 body.preload {
   opacity: 0;
+  visibility: hidden;
+}
+
+body:not(.preload) {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.5s ease 0.5s, visibility 0s linear 0s, background-color 0.4s ease, color 0.4s ease;
+}
+
+body,
+.theme-toggle,
+.carousel-control,
+.info-box {
+  transition: background-color 0.4s ease 0s, color 0.4s ease 0s, border-color 0.4s ease 0s, box-shadow 0.4s ease 0s;
 }
 
 body.interaction-locked .carousel-container,
@@ -43,7 +83,7 @@ body.interaction-locked .carousel-control {
     align-items: center;
 }
 .logo {
-    color: #000;
+    color: var(--text);
     font-family: 'Doto';
     font-size: 80px;
     font-style: normal;
@@ -66,7 +106,7 @@ body.interaction-locked .carousel-control {
   width: 400px;
   height: 400px;
   background-color: sandybrown;
-  color: #000;
+  color: var(--text);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -75,7 +115,7 @@ body.interaction-locked .carousel-control {
   transition: transform 1s ease, filter 1s ease, opacity 1s ease;
   will-change: transform;
   object-fit: cover;
-  border: 1px solid black;
+  border: 1px solid var(--border);
   cursor: pointer;
 }
 
@@ -95,14 +135,14 @@ body.interaction-locked .carousel-control {
 
 .carousel-control {
   pointer-events: auto;
-  background: white;
+  background-color: var(--control-bg);
   cursor: pointer;
   padding: 0 0 10px;
   border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0,0,0,0.85);
+  color: var(--control-text);
   font-family: 'Doto', monospace;
   font-size: 56px;
   line-height: 1;
@@ -124,11 +164,11 @@ body.interaction-locked .carousel-control {
 }
 
 .carousel-control#nextBtn .arrow {
-  transform: translateX(2px);
+  transform: translateX(4px);
 }
 
 .carousel-control:hover {
-  color: rgba(0,0,0,0.95);
+  color: var(--control-text);
 }
 
 .audio-player,
@@ -156,7 +196,7 @@ body.ui-visible .progress-row {
   justify-content: flex-start;
   gap: 16px;
   padding-top: 8px;
-  color: #000;
+  color: var(--text);
   font-family: 'Doto', sans-serif;
 }
 
@@ -170,7 +210,7 @@ body.ui-visible .progress-row {
 .volume-row .volume-label,
 .volume-row .volume-pct {
   font-size: 0.85rem;
-  color: #000;
+  color: var(--text);
   font-weight: 700;
   justify-self: start;
 }
@@ -183,7 +223,7 @@ body.ui-visible .progress-row {
 .progress-shell {
   position: relative;
   height: 10px;
-  background: rgba(0, 118, 255, 0.16);
+  background: var(--accent-soft);
   border-radius: 999px;
   overflow: hidden;
   cursor: pointer;
@@ -197,7 +237,7 @@ body.ui-visible .progress-row {
 .progress-bar {
   width: 0%;
   height: 100%;
-  background: #0066ff;
+  background: var(--accent);
   border-radius: 999px;
 }
 
@@ -214,12 +254,12 @@ body.ui-visible .progress-row {
   text-align: center;
   font-size: 1rem;
   font-weight: 700;
-  color: #000;
+  color: var(--text);
   margin-top: 12px;
 }
 
 .time {
-  color: #000;
+  color: var(--text);
 }
 
 .progress-row {
@@ -234,6 +274,37 @@ body.ui-visible .progress-row {
   font-size: 0.85rem;
 }
 
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 9999;
+  border: 1px solid var(--border);
+  background-color: var(--panel);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-family: 'Doto', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  opacity: 0.9;
+}
+
+.theme-icon[src$="sun.svg"],
+.theme-icon[src$="moon.svg"] {
+  transform: translateY(1px);
+}
+
+.theme-icon[src$="sun.svg"] {
+  filter: invert(1);
+  -webkit-filter: invert(1);
+}
+
 /* Top-right small info box (rounded) */
 .info-box{
   position: fixed;
@@ -244,10 +315,10 @@ body.ui-visible .progress-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff;
+  background-color: var(--panel);
   border-radius: 12px;
   font-family: 'Doto', 'Courier New', Courier, monospace;
-  color: #111;
+  color: var(--text);
   z-index: 9999;
 }
 .info-text{flex:1; display:flex; flex-direction:column; align-items:flex-end; text-align:right}
